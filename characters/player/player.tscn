@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7u77n677yr40"]
+
+[ext_resource type="Script" path="res://characters/player/player.gd" id="1_6vuoc"]
+[ext_resource type="Script" path="res://characters/player/attack.gd" id="2_i00mi"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o54y3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ymca"]
+size = Vector2(20, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nwijw"]
+size = Vector2(7, 16)
+
+[node name="Player" type="CharacterBody2D"]
+collision_mask = 3
+script = ExtResource("1_6vuoc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_o54y3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Turnable" type="Node2D" parent="."]
+
+[node name="Attack" type="Area2D" parent="Turnable"]
+collision_mask = 2
+script = ExtResource("2_i00mi")
+
+[node name="PunchCollision" type="CollisionShape2D" parent="Turnable/Attack"]
+position = Vector2(20, -3)
+shape = SubResource("RectangleShape2D_6ymca")
+disabled = true
+
+[node name="UpperCutCollision" type="CollisionShape2D" parent="Turnable/Attack"]
+position = Vector2(14, -7)
+shape = SubResource("RectangleShape2D_nwijw")
+disabled = true
+
+[node name="Timer" type="Timer" parent="Turnable/Attack"]
+wait_time = 0.05
+one_shot = true
+
+[node name="ComboTimer" type="Timer" parent="Turnable/Attack"]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="body_entered" from="Turnable/Attack" to="." method="_on_attack_body_entered"]
+[connection signal="timeout" from="Turnable/Attack/Timer" to="Turnable/Attack" method="_on_timer_timeout"]
+[connection signal="timeout" from="Turnable/Attack/ComboTimer" to="Turnable/Attack" method="_on_combo_timer_timeout"]

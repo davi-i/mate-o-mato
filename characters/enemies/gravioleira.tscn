@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3 uid="uid://cc2wi7kom0g6v"]
+
+[ext_resource type="Script" path="res://characters/enemies/enemy.gd" id="1_f8qwh"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_xl1q2"]
+[ext_resource type="Script" path="res://characters/actions/move_to_target.gd" id="2_asjem"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="3_1wt8o"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="3_85yik"]
+[ext_resource type="Script" path="res://addons/beehave/blackboard.gd" id="3_y8ny6"]
+[ext_resource type="Script" path="res://characters/conditions/reach_player.gd" id="5_5vrva"]
+[ext_resource type="Script" path="res://characters/actions/attack.gd" id="5_sh4hf"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bcce4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_acqu8"]
+size = Vector2(20, 8)
+
+[node name="Gravioleira" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_f8qwh")
+
+[node name="BeehaveTree" type="Node" parent="." node_paths=PackedStringArray("blackboard", "actor")]
+script = ExtResource("1_xl1q2")
+blackboard = NodePath("../Blackboard")
+actor = NodePath("..")
+
+[node name="SelectorReactiveComposite" type="Node" parent="BeehaveTree"]
+script = ExtResource("3_85yik")
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+script = ExtResource("3_1wt8o")
+
+[node name="ReachPlayer" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceComposite"]
+script = ExtResource("5_5vrva")
+
+[node name="AttackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceComposite"]
+script = ExtResource("5_sh4hf")
+
+[node name="MoveToTarget" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+script = ExtResource("2_asjem")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_bcce4")
+
+[node name="Blackboard" type="Node" parent="."]
+script = ExtResource("3_y8ny6")
+
+[node name="Turnable" type="Node2D" parent="."]
+
+[node name="PlayerReach" type="Area2D" parent="Turnable"]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Turnable/PlayerReach"]
+position = Vector2(20, -3)
+shape = SubResource("RectangleShape2D_acqu8")
+
+[node name="Attack" type="Area2D" parent="Turnable"]
+collision_layer = 2
+
+[node name="PunchCollision" type="CollisionShape2D" parent="Turnable/Attack"]
+position = Vector2(20, -3)
+shape = SubResource("RectangleShape2D_acqu8")
+disabled = true
+
+[node name="Timer" type="Timer" parent="Turnable/Attack"]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="body_entered" from="Turnable/PlayerReach" to="." method="_on_player_reach_body_entered"]
+[connection signal="body_exited" from="Turnable/PlayerReach" to="." method="_on_player_reach_body_exited"]
+[connection signal="body_entered" from="Turnable/Attack" to="." method="_on_attack_body_entered"]
+[connection signal="timeout" from="Turnable/Attack/Timer" to="." method="_on_attack_timer_timeout"]
