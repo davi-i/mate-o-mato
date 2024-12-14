@@ -1,7 +1,14 @@
 extends ActionLeaf
 class_name AttackAction
 
-func tick(actor: Node, blackboard: Blackboard) -> int:
+func before_run(actor: Node, blackboard: Blackboard) -> void:
 	actor.attack()
-	
-	return SUCCESS
+
+func tick(actor: Node, blackboard: Blackboard) -> int:
+	if actor.is_attacking():
+		return RUNNING
+	else:
+		return SUCCESS
+
+#func interrupt(actor: Node, blackboard: Blackboard) -> void:
+	#actor.cancel_attack()

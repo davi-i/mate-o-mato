@@ -18,8 +18,14 @@ position = Vector2(25.5, -7.49995)
 scale = Vector2(22.0156, 13.6094)
 texture = SubResource("GradientTexture2D_kme10")
 
-[node name="Player" parent="." instance=ExtResource("1_ku2yd")]
+[node name="Objects" type="Node2D" parent="."]
+y_sort_enabled = true
+position = Vector2(25.5, -7.49995)
+scale = Vector2(5, 5)
 
-[node name="Enemy" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_8v8hl")]
-position = Vector2(221, 0)
-target = NodePath("../Player")
+[node name="Player" parent="Objects" instance=ExtResource("1_ku2yd")]
+position = Vector2(-392.3, 41.9)
+
+[node name="Gravioleira" parent="Objects" node_paths=PackedStringArray("player") instance=ExtResource("2_8v8hl")]
+position = Vector2(-56.5, 82.4999)
+player = NodePath("../Player")
