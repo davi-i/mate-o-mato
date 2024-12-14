@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcw3p3rfsf6db"
-path="res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"
+uid="uid://bixuehctco50d"
+path="res://.godot/imported/jaca.png-de19ef58ac6aa7afb43ba0a6cb543267.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player/sprites/voinha_dano-Sheet.png"
-dest_files=["res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"]
+source_file="res://characters/enemies/jaqueira/sprites/jaca.png"
+dest_files=["res://.godot/imported/jaca.png-de19ef58ac6aa7afb43ba0a6cb543267.ctex"]
 
 [params]
 

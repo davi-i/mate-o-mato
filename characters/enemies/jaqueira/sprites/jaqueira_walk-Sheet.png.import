@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcw3p3rfsf6db"
-path="res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"
+uid="uid://dvb8nox1lx0h6"
+path="res://.godot/imported/jaqueira_walk-Sheet.png-27f91fb4b99874a310100ca8b4f3e7c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player/sprites/voinha_dano-Sheet.png"
-dest_files=["res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"]
+source_file="res://characters/enemies/jaqueira/sprites/jaqueira_walk-Sheet.png"
+dest_files=["res://.godot/imported/jaqueira_walk-Sheet.png-27f91fb4b99874a310100ca8b4f3e7c3.ctex"]
 
 [params]
 

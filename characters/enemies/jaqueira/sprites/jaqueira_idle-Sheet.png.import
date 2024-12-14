@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgesvayy4w4w5"
-path="res://.godot/imported/gravioleira_punch_combo-Sheet.png-580b4b63f8deaae134ccd34addde56af.ctex"
+uid="uid://d0gv7818xobed"
+path="res://.godot/imported/jaqueira_idle-Sheet.png-ed8098b68481e4e28c5fe7c949dd4af1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/enemies/Sprites/gravioleira_punch_combo-Sheet.png"
-dest_files=["res://.godot/imported/gravioleira_punch_combo-Sheet.png-580b4b63f8deaae134ccd34addde56af.ctex"]
+source_file="res://characters/enemies/jaqueira/sprites/jaqueira_idle-Sheet.png"
+dest_files=["res://.godot/imported/jaqueira_idle-Sheet.png-ed8098b68481e4e28c5fe7c949dd4af1.ctex"]
 
 [params]
 

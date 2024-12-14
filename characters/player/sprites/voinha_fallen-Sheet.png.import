@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctxclpxnyh6s7"
-path="res://.godot/imported/voinha_fallen-Sheet.png-3484d08ae6880bb7f69a0722f9db9941.ctex"
+path="res://.godot/imported/voinha_fallen-Sheet.png-6075434b2af7065ae294897e6f0f151e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player/Sprites/voinha_fallen-Sheet.png"
-dest_files=["res://.godot/imported/voinha_fallen-Sheet.png-3484d08ae6880bb7f69a0722f9db9941.ctex"]
+source_file="res://characters/player/sprites/voinha_fallen-Sheet.png"
+dest_files=["res://.godot/imported/voinha_fallen-Sheet.png-6075434b2af7065ae294897e6f0f151e.ctex"]
 
 [params]
 

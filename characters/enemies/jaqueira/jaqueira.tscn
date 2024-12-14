@@ -1,6 +1,6 @@
 [gd_scene load_steps=47 format=3 uid="uid://c18ejp3xww7bx"]
 
-[ext_resource type="Script" path="res://characters/enemies/jaqueira.gd" id="1_67487"]
+[ext_resource type="Script" path="res://characters/enemies/jaqueira/jaqueira.gd" id="1_67487"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="2_u1hfq"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="3_mdkti"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="4_fldct"]

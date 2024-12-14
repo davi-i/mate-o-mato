@@ -1,6 +1,6 @@
 [gd_scene load_steps=54 format=3 uid="uid://cc2wi7kom0g6v"]
 
-[ext_resource type="Script" path="res://characters/enemies/gravioleira.gd" id="1_f8qwh"]
+[ext_resource type="Script" path="res://characters/enemies/gravioleira/gravioleira.gd" id="1_f8qwh"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_xl1q2"]
 [ext_resource type="Script" path="res://characters/actions/move_to_target.gd" id="2_asjem"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="3_1wt8o"]
@@ -18,9 +18,9 @@
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="8_m3h16"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/decorators/inverter.gd" id="10_5phj7"]
 [ext_resource type="Script" path="res://characters/conditions/acting.gd" id="10_jfnta"]
-[ext_resource type="Texture2D" uid="uid://c452iejm0rq3k" path="res://characters/enemies/sprites/gravioleira_idle-Sheet.png" id="12_kubn8"]
-[ext_resource type="Texture2D" uid="uid://dp3wseafo8045" path="res://characters/enemies/sprites/gravioleira_punch_combo-Sheet.png" id="13_ywd2k"]
-[ext_resource type="Texture2D" uid="uid://cd7dphiq1o84o" path="res://characters/enemies/sprites/gravioleira_walk-Sheet.png" id="14_174ga"]
+[ext_resource type="Texture2D" uid="uid://c452iejm0rq3k" path="res://characters/enemies/gravioleira/sprites/gravioleira_idle-Sheet.png" id="12_kubn8"]
+[ext_resource type="Texture2D" uid="uid://dgesvayy4w4w5" path="res://characters/enemies/gravioleira/sprites/gravioleira_punch_combo-Sheet.png" id="13_ywd2k"]
+[ext_resource type="Texture2D" uid="uid://cd7dphiq1o84o" path="res://characters/enemies/gravioleira/sprites/gravioleira_walk-Sheet.png" id="14_174ga"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45cbs"]
 size = Vector2(20, 9)

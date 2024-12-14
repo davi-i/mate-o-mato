@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cd7dphiq1o84o"
-path="res://.godot/imported/gravioleira_walk-Sheet.png-c27725d113358756a374a51edd845ec4.ctex"
+uid="uid://17idppamwtek"
+path="res://.godot/imported/gravioleira_gettup-Sheet.png-f22262913537d61e734270f93284555e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/enemies/sprites/gravioleira_walk-Sheet.png"
-dest_files=["res://.godot/imported/gravioleira_walk-Sheet.png-c27725d113358756a374a51edd845ec4.ctex"]
+source_file="res://characters/enemies/gravioleira/sprites/gravioleira_gettup-Sheet.png"
+dest_files=["res://.godot/imported/gravioleira_gettup-Sheet.png-f22262913537d61e734270f93284555e.ctex"]
 
 [params]
 

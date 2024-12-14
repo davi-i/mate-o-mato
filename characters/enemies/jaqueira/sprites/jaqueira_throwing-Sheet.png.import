@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ba2u0ubsvkws8"
-path="res://.godot/imported/gravioleira_fallen-Sheet.png-b1e4cd3c2025576fcbe1ed5324417c35.ctex"
+uid="uid://ca6y2cfuvp44r"
+path="res://.godot/imported/jaqueira_throwing-Sheet.png-353b1c503b23e3508ca083bf1e50b024.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/enemies/Sprites/gravioleira_fallen-Sheet.png"
-dest_files=["res://.godot/imported/gravioleira_fallen-Sheet.png-b1e4cd3c2025576fcbe1ed5324417c35.ctex"]
+source_file="res://characters/enemies/jaqueira/sprites/jaqueira_throwing-Sheet.png"
+dest_files=["res://.godot/imported/jaqueira_throwing-Sheet.png-353b1c503b23e3508ca083bf1e50b024.ctex"]
 
 [params]
 

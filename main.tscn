@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dymob2n50ipiq"]
 
 [ext_resource type="PackedScene" uid="uid://b7u77n677yr40" path="res://characters/player/player.tscn" id="1_ku2yd"]
-[ext_resource type="PackedScene" uid="uid://cc2wi7kom0g6v" path="res://characters/enemies/gravioleira.tscn" id="2_8v8hl"]
+[ext_resource type="PackedScene" uid="uid://cc2wi7kom0g6v" path="res://characters/enemies/gravioleira/gravioleira.tscn" id="2_8v8hl"]
 
 [sub_resource type="Gradient" id="Gradient_yevg2"]
 offsets = PackedFloat32Array(0, 0.558442, 1)

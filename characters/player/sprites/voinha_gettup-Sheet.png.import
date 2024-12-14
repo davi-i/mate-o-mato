@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://g353ul8itoci"
-path="res://.godot/imported/voinha_gettup-Sheet.png-7bd4c5dda603a9afca2bd529153ffcd0.ctex"
+path="res://.godot/imported/voinha_gettup-Sheet.png-bb53fb8a309c67089e675add55b16a0b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player/Sprites/voinha_gettup-Sheet.png"
-dest_files=["res://.godot/imported/voinha_gettup-Sheet.png-7bd4c5dda603a9afca2bd529153ffcd0.ctex"]
+source_file="res://characters/player/sprites/voinha_gettup-Sheet.png"
+dest_files=["res://.godot/imported/voinha_gettup-Sheet.png-bb53fb8a309c67089e675add55b16a0b.ctex"]
 
 [params]
 

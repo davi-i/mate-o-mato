@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcw3p3rfsf6db"
-path="res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"
+uid="uid://c452iejm0rq3k"
+path="res://.godot/imported/gravioleira_idle-Sheet.png-9d12f52ba11ea59cb1e7bef4283c41be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://characters/player/sprites/voinha_dano-Sheet.png"
-dest_files=["res://.godot/imported/voinha_dano-Sheet.png-ef96223fc5a4ab51584807041449fb14.ctex"]
+source_file="res://characters/enemies/gravioleira/sprites/gravioleira_idle-Sheet.png"
+dest_files=["res://.godot/imported/gravioleira_idle-Sheet.png-9d12f52ba11ea59cb1e7bef4283c41be.ctex"]
 
 [params]
 
