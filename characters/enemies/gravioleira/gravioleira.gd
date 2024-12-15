@@ -51,9 +51,10 @@ func _on_damage_area_entered(area: Area2D) -> void:
 	if area.is_in_group("players"):
 		print("damage enemy")
 		cancel_attack()
-		damage.get_node("FallDown").start(0)
+		damage.get_node("FallDown").start()
 		var damage_taken = area.attack_damage()
 		total_damage += damage_taken
+		print("total damage", total_damage)
 		$Blackboard.set_value("damage", true)
 		if total_damage >= Global.DAMAGE_TO_FALL_DOWN:
 			$Blackboard.set_value("fall_down", true)

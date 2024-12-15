@@ -2,8 +2,8 @@ extends CharacterBody2D
 class_name Player
 
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const SPEED = 60.0
+const JUMP_VELOCITY = -80.0
 
 @onready var sprite = $Turnable/AnimatedSprite2D
 @onready var attack = $Turnable/Attack
@@ -64,9 +64,11 @@ func _on_damage_area_entered(area: Area2D) -> void:
 		damage.get_node("Cooldown").start()
 		var direction = area.find_parent("Turnable").scale.x
 		velocity.x += direction * 200
+		sprite.play("knockback")
 
 func _on_cooldown_timeout() -> void:
 	velocity.x = 0
+	sprite.play("idle")
 
 var base_attack = 1
 

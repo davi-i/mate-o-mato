@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dymob2n50ipiq"]
+[gd_scene load_steps=6 format=3 uid="uid://dymob2n50ipiq"]
 
 [ext_resource type="PackedScene" uid="uid://b7u77n677yr40" path="res://characters/player/player.tscn" id="1_ku2yd"]
-[ext_resource type="PackedScene" uid="uid://cc2wi7kom0g6v" path="res://characters/enemies/gravioleira/gravioleira.tscn" id="2_8v8hl"]
+[ext_resource type="PackedScene" uid="uid://c18ejp3xww7bx" path="res://characters/enemies/jaqueira/jaqueira.tscn" id="3_o12ur"]
 
 [sub_resource type="Gradient" id="Gradient_yevg2"]
 offsets = PackedFloat32Array(0, 0.558442, 1)
@@ -10,6 +10,8 @@ colors = PackedColorArray(1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_kme10"]
 gradient = SubResource("Gradient_yevg2")
 fill_to = Vector2(1, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tsd0a"]
 
 [node name="Main" type="Node2D"]
 
@@ -20,12 +22,17 @@ texture = SubResource("GradientTexture2D_kme10")
 
 [node name="Objects" type="Node2D" parent="."]
 y_sort_enabled = true
-position = Vector2(25.5, -7.49995)
-scale = Vector2(5, 5)
 
 [node name="Player" parent="Objects" instance=ExtResource("1_ku2yd")]
 position = Vector2(-392.3, 41.9)
 
-[node name="Gravioleira" parent="Objects" node_paths=PackedStringArray("player") instance=ExtResource("2_8v8hl")]
-position = Vector2(-56.5, 82.4999)
+[node name="Jaqueira" parent="Objects" node_paths=PackedStringArray("player") instance=ExtResource("3_o12ur")]
+position = Vector2(-165.3, 276.3)
 player = NodePath("../Player")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(-1467, 1913)
+scale = Vector2(210.288, 26.743)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_tsd0a")

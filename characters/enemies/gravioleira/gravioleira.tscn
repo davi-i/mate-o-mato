@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cc2wi7kom0g6v"]
+[gd_scene load_steps=59 format=3 uid="uid://cc2wi7kom0g6v"]
 
 [ext_resource type="Script" path="res://characters/enemies/gravioleira/gravioleira.gd" id="1_f8qwh"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_xl1q2"]
@@ -12,18 +12,31 @@
 [ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_compare.gd" id="5_gt226"]
 [ext_resource type="Script" path="res://characters/actions/attack.gd" id="5_sh4hf"]
 [ext_resource type="Script" path="res://characters/actions/set_sprite_color.gd" id="6_ldutx"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="7_0xt0x"]
 [ext_resource type="Script" path="res://characters/actions/jump_back.gd" id="7_kn513"]
 [ext_resource type="Script" path="res://characters/actions/wait_timer.gd" id="8_as5hh"]
 [ext_resource type="Script" path="res://characters/actions/play_sprite_animation.gd" id="8_iemc8"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="8_m3h16"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/decorators/inverter.gd" id="10_5phj7"]
 [ext_resource type="Script" path="res://characters/conditions/acting.gd" id="10_jfnta"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_erase.gd" id="11_ae4dn"]
 [ext_resource type="Texture2D" uid="uid://c452iejm0rq3k" path="res://characters/enemies/gravioleira/sprites/gravioleira_idle-Sheet.png" id="12_kubn8"]
 [ext_resource type="Texture2D" uid="uid://dgesvayy4w4w5" path="res://characters/enemies/gravioleira/sprites/gravioleira_punch_combo-Sheet.png" id="13_ywd2k"]
 [ext_resource type="Texture2D" uid="uid://cd7dphiq1o84o" path="res://characters/enemies/gravioleira/sprites/gravioleira_walk-Sheet.png" id="14_174ga"]
+[ext_resource type="Texture2D" uid="uid://ba2u0ubsvkws8" path="res://characters/enemies/gravioleira/sprites/gravioleira_fallen-Sheet.png" id="19_6heqv"]
+[ext_resource type="Texture2D" uid="uid://17idppamwtek" path="res://characters/enemies/gravioleira/sprites/gravioleira_gettup-Sheet.png" id="20_rreu2"]
+[ext_resource type="Script" path="res://characters/enemies/gravioleira/attack.gd" id="26_3w22h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45cbs"]
 size = Vector2(20, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kti22"]
+atlas = ExtResource("19_6heqv")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rldcl"]
+atlas = ExtResource("20_rreu2")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ukx5n"]
 atlas = ExtResource("12_kubn8")
@@ -49,17 +62,9 @@ region = Rect2(256, 0, 64, 64)
 atlas = ExtResource("12_kubn8")
 region = Rect2(320, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ej5bf"]
-atlas = ExtResource("13_ywd2k")
-region = Rect2(0, 128, 64, 64)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_snalk"]
 atlas = ExtResource("13_ywd2k")
 region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e41xk"]
-atlas = ExtResource("13_ywd2k")
-region = Rect2(128, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_csrea"]
 atlas = ExtResource("13_ywd2k")
@@ -137,6 +142,22 @@ region = Rect2(576, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_kti22")
+}],
+"loop": true,
+"name": &"fall_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rldcl")
+}],
+"loop": true,
+"name": &"get_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ukx5n")
 }, {
 "duration": 1.0,
@@ -160,15 +181,9 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ej5bf")
-}, {
-"duration": 2.0,
 "texture": SubResource("AtlasTexture_snalk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e41xk")
 }],
-"loop": false,
+"loop": true,
 "name": &"jump_back",
 "speed": 5.0
 }, {
@@ -272,16 +287,86 @@ script = ExtResource("5_gt226")
 left_operand = "get_value(\"damage\")"
 right_operand = "true"
 
-[node name="SetSpriteColorAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
+[node name="SetSpriteColorToRed" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
 script = ExtResource("6_ldutx")
 sprite = NodePath("../../../../Turnable/AnimatedSprite2D")
-color = Color(1, 0, 0, 1)
+color = Color(1, 0.117647, 0.184314, 1)
+
+[node name="AlwaysSucceedDecorator" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("7_0xt0x")
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator"]
+script = ExtResource("3_1wt8o")
+
+[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+script = ExtResource("5_gt226")
+left_operand = "get_value(\"fall_down\")"
+right_operand = "true"
+
+[node name="SetJumpBackImpulse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+script = ExtResource("4_fyquc")
+key = "\"jump_back_impulse\""
+value = "Vector2(500,-200)"
+
+[node name="JumpBackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+script = ExtResource("7_kn513")
+
+[node name="ErasseJumpBackImpulse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+script = ExtResource("11_ae4dn")
+key = "\"jump_back_impulse\""
+
+[node name="SetSpriteAnimationToFallDown" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite" node_paths=PackedStringArray("sprite")]
+script = ExtResource("8_iemc8")
+sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
+animation = &"fall_down"
+
+[node name="SetTimerTime" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+script = ExtResource("4_fyquc")
+key = "\"stun_time\""
+value = "1"
 
 [node name="WaitTimerAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("timer")]
 script = ExtResource("8_as5hh")
 timer = NodePath("../../../../Turnable/Damage/Cooldown")
+blackboard_value = "stun_time"
 
-[node name="SetSpriteColorAction2" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
+[node name="AlwaysSucceedDecorator2" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("7_0xt0x")
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2"]
+script = ExtResource("3_1wt8o")
+
+[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
+script = ExtResource("5_gt226")
+left_operand = "get_value(\"fall_down\")"
+right_operand = "true"
+
+[node name="SetSpriteAnimationToGetUp" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("sprite")]
+script = ExtResource("8_iemc8")
+sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
+animation = &"get_up"
+
+[node name="WaitTimerAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("timer")]
+script = ExtResource("8_as5hh")
+timer = NodePath("../../../../../../Turnable/Damage/Cooldown")
+blackboard_value = "stun_time"
+
+[node name="SetSpriteAnimationToIdle" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("sprite")]
+script = ExtResource("8_iemc8")
+sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
+animation = &"idle"
+
+[node name="SetFallDownToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
+script = ExtResource("4_fyquc")
+key = "\"fall_down\""
+value = "false"
+
+[node name="ResetOriginalTImerTime" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
+script = ExtResource("4_fyquc")
+key = "\"stun_time\""
+value = "get_value(\"original_stun_time\")"
+
+[node name="SetSpriteColorToWhite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
 script = ExtResource("6_ldutx")
 sprite = NodePath("../../../../Turnable/AnimatedSprite2D")
 color = Color(1, 1, 1, 1)
@@ -365,19 +450,20 @@ script = ExtResource("3_y8ny6")
 texture_filter = 1
 position = Vector2(1, 0)
 sprite_frames = SubResource("SpriteFrames_j14qf")
-animation = &"right_punch"
+animation = &"jump_back"
 autoplay = "idle"
 speed_scale = 2.0
 
 [node name="PlayerReach" type="Area2D" parent="Turnable"]
+position = Vector2(14, -11)
 collision_layer = 8
 
 [node name="PunchCollision" type="CollisionShape2D" parent="Turnable/PlayerReach"]
-position = Vector2(14, -11)
 shape = SubResource("RectangleShape2D_llqa6")
 
 [node name="Attack" type="Area2D" parent="Turnable" groups=["enemies"]]
 collision_layer = 8
+script = ExtResource("26_3w22h")
 
 [node name="PunchCollision" type="CollisionShape2D" parent="Turnable/Attack"]
 position = Vector2(14, -11)

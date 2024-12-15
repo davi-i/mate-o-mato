@@ -1,7 +1,7 @@
 extends ActionLeaf
 class_name MoveToTargetAction
 
-const DEFAULT_SPEED = 300
+const DEFAULT_SPEED = 60
 
 func tick(actor: Node, blackboard: Blackboard) -> int:
 	var target = blackboard.get_value("target")
