@@ -1,11 +1,14 @@
-[gd_scene load_steps=41 format=3 uid="uid://b7u77n677yr40"]
+[gd_scene load_steps=46 format=3 uid="uid://b7u77n677yr40"]
 
 [ext_resource type="Script" path="res://characters/player/player.gd" id="1_6vuoc"]
 [ext_resource type="Script" path="res://characters/player/attack.gd" id="2_i00mi"]
 [ext_resource type="Texture2D" uid="uid://bwqsnufsbu5e4" path="res://characters/player/sprites/voinha_idle-Sheet.png" id="2_tnal2"]
+[ext_resource type="Texture2D" uid="uid://ctxclpxnyh6s7" path="res://characters/player/sprites/voinha_fallen-Sheet.png" id="3_ed80o"]
 [ext_resource type="Texture2D" uid="uid://bvnecorwd4pcb" path="res://characters/player/sprites/voinha_punch_combo-Sheet.png" id="3_nmpju"]
+[ext_resource type="Texture2D" uid="uid://g353ul8itoci" path="res://characters/player/sprites/voinha_gettup-Sheet.png" id="4_md0n8"]
 [ext_resource type="Texture2D" uid="uid://4jqpjeihcnrs" path="res://characters/player/sprites/voinha_walk-Sheet.png" id="4_u5rao"]
 [ext_resource type="Texture2D" uid="uid://bcw3p3rfsf6db" path="res://characters/player/sprites/voinha_dano-Sheet.png" id="4_v08cb"]
+[ext_resource type="PackedScene" uid="uid://c6gb10qkoj7bx" path="res://characters/components/damage.tscn" id="7_6rwgy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hnko2"]
 size = Vector2(20, 8)
@@ -15,6 +18,14 @@ size = Vector2(11, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwijw"]
 size = Vector2(10, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4c6yf"]
+atlas = ExtResource("3_ed80o")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vir0u"]
+atlas = ExtResource("4_md0n8")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_im0bh"]
 atlas = ExtResource("2_tnal2")
@@ -134,6 +145,22 @@ region = Rect2(576, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_aak6i"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4c6yf")
+}],
+"loop": true,
+"name": &"fall_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vir0u")
+}],
+"loop": true,
+"name": &"get_up",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_im0bh")
@@ -292,23 +319,24 @@ one_shot = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turnable"]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_aak6i")
-animation = &"knockback"
+animation = &"get_up"
 autoplay = "idle"
 speed_scale = 2.0
 
-[node name="Damage" type="Area2D" parent="Turnable" groups=["players"]]
+[node name="Damage" parent="Turnable" groups=["players"] instance=ExtResource("7_6rwgy")]
+collision_layer = 1
 collision_mask = 8
+damage_group = &"enemies"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Turnable/Damage"]
 position = Vector2(-1.5, -4)
 shape = SubResource("RectangleShape2D_xtqay")
 
-[node name="Cooldown" type="Timer" parent="Turnable/Damage"]
-wait_time = 0.2
-one_shot = true
-
 [connection signal="body_entered" from="Turnable/Attack" to="." method="_on_attack_body_entered"]
 [connection signal="timeout" from="Turnable/Attack/ComboTimer" to="Turnable/Attack" method="_on_combo_timer_timeout"]
 [connection signal="animation_finished" from="Turnable/AnimatedSprite2D" to="Turnable/Attack" method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="area_entered" from="Turnable/Damage" to="." method="_on_damage_area_entered"]
-[connection signal="timeout" from="Turnable/Damage/Cooldown" to="." method="_on_cooldown_timeout"]
+[connection signal="cooldown_end" from="Turnable/Damage" to="." method="_on_damage_cooldown_end"]
+[connection signal="damage_taken" from="Turnable/Damage" to="." method="_on_damage_damage_taken"]
+[connection signal="fall_down" from="Turnable/Damage" to="." method="_on_damage_fall_down"]
+[connection signal="get_up" from="Turnable/Damage" to="." method="_on_damage_get_up"]
+[connection signal="start_get_up" from="Turnable/Damage" to="." method="_on_damage_start_get_up"]

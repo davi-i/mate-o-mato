@@ -34,8 +34,8 @@ func _on_combo_timer_timeout() -> void:
 
 func cancel_attack():
 	if is_attacking():
-		$UpperCutCollision.disabled = true
-		$PunchCollision.disabled = true
+		$UpperCutCollision.set_deferred("disabled", true)
+		$PunchCollision.set_deferred("disabled", true)
 		sprite.play("idle")
 
 func _on_animated_sprite_2d_animation_finished() -> void:

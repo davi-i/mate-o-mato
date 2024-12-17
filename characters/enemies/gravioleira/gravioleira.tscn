@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://cc2wi7kom0g6v"]
+[gd_scene load_steps=58 format=3 uid="uid://cc2wi7kom0g6v"]
 
 [ext_resource type="Script" path="res://characters/enemies/gravioleira/gravioleira.gd" id="1_f8qwh"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="1_xl1q2"]
@@ -11,21 +11,20 @@
 [ext_resource type="Script" path="res://characters/actions/set_enemy_target.gd" id="5_btms8"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_compare.gd" id="5_gt226"]
 [ext_resource type="Script" path="res://characters/actions/attack.gd" id="5_sh4hf"]
-[ext_resource type="Script" path="res://characters/actions/set_sprite_color.gd" id="6_ldutx"]
-[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/succeeder.gd" id="7_0xt0x"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector.gd" id="7_befo8"]
 [ext_resource type="Script" path="res://characters/actions/jump_back.gd" id="7_kn513"]
 [ext_resource type="Script" path="res://characters/actions/wait_timer.gd" id="8_as5hh"]
-[ext_resource type="Script" path="res://characters/actions/play_sprite_animation.gd" id="8_iemc8"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="8_m3h16"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/decorators/inverter.gd" id="10_5phj7"]
 [ext_resource type="Script" path="res://characters/conditions/acting.gd" id="10_jfnta"]
-[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_erase.gd" id="11_ae4dn"]
+[ext_resource type="Script" path="res://characters/actions/wait_signal.gd" id="12_7e5mn"]
 [ext_resource type="Texture2D" uid="uid://c452iejm0rq3k" path="res://characters/enemies/gravioleira/sprites/gravioleira_idle-Sheet.png" id="12_kubn8"]
 [ext_resource type="Texture2D" uid="uid://dgesvayy4w4w5" path="res://characters/enemies/gravioleira/sprites/gravioleira_punch_combo-Sheet.png" id="13_ywd2k"]
 [ext_resource type="Texture2D" uid="uid://cd7dphiq1o84o" path="res://characters/enemies/gravioleira/sprites/gravioleira_walk-Sheet.png" id="14_174ga"]
 [ext_resource type="Texture2D" uid="uid://ba2u0ubsvkws8" path="res://characters/enemies/gravioleira/sprites/gravioleira_fallen-Sheet.png" id="19_6heqv"]
 [ext_resource type="Texture2D" uid="uid://17idppamwtek" path="res://characters/enemies/gravioleira/sprites/gravioleira_gettup-Sheet.png" id="20_rreu2"]
 [ext_resource type="Script" path="res://characters/enemies/gravioleira/attack.gd" id="26_3w22h"]
+[ext_resource type="PackedScene" uid="uid://c6gb10qkoj7bx" path="res://characters/components/damage.tscn" id="27_qkout"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45cbs"]
 size = Vector2(20, 9)
@@ -282,96 +281,42 @@ script = ExtResource("3_85yik")
 [node name="Damage" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
 script = ExtResource("3_1wt8o")
 
-[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+[node name="CheckDamageTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
 script = ExtResource("5_gt226")
 left_operand = "get_value(\"damage\")"
 right_operand = "true"
 
-[node name="SetSpriteColorToRed" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
-script = ExtResource("6_ldutx")
-sprite = NodePath("../../../../Turnable/AnimatedSprite2D")
-color = Color(1, 0.117647, 0.184314, 1)
+[node name="WaitCooldown" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("7_befo8")
 
-[node name="AlwaysSucceedDecorator" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
-script = ExtResource("7_0xt0x")
-
-[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator"]
+[node name="FallDownAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown"]
 script = ExtResource("3_1wt8o")
 
-[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+[node name="CheckFallDownTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
 script = ExtResource("5_gt226")
 left_operand = "get_value(\"fall_down\")"
 right_operand = "true"
 
-[node name="SetJumpBackImpulse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
-script = ExtResource("4_fyquc")
-key = "\"jump_back_impulse\""
-value = "Vector2(500,-200)"
-
-[node name="JumpBackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
+[node name="JumpBackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
 script = ExtResource("7_kn513")
+impulse = Vector2(300, -200)
 
-[node name="ErasseJumpBackImpulse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
-script = ExtResource("11_ae4dn")
-key = "\"jump_back_impulse\""
+[node name="WaitGetUp" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction" node_paths=PackedStringArray("node")]
+script = ExtResource("12_7e5mn")
+node = NodePath("../../../../../../Turnable/Damage")
+signal_to_wait = &"get_up"
 
-[node name="SetSpriteAnimationToFallDown" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite" node_paths=PackedStringArray("sprite")]
-script = ExtResource("8_iemc8")
-sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
-animation = &"fall_down"
-
-[node name="SetTimerTime" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator/SequenceComposite"]
-script = ExtResource("4_fyquc")
-key = "\"stun_time\""
-value = "1"
-
-[node name="WaitTimerAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("timer")]
-script = ExtResource("8_as5hh")
-timer = NodePath("../../../../Turnable/Damage/Cooldown")
-blackboard_value = "stun_time"
-
-[node name="AlwaysSucceedDecorator2" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
-script = ExtResource("7_0xt0x")
-
-[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2"]
-script = ExtResource("3_1wt8o")
-
-[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
-script = ExtResource("5_gt226")
-left_operand = "get_value(\"fall_down\")"
-right_operand = "true"
-
-[node name="SetSpriteAnimationToGetUp" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("sprite")]
-script = ExtResource("8_iemc8")
-sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
-animation = &"get_up"
-
-[node name="WaitTimerAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("timer")]
-script = ExtResource("8_as5hh")
-timer = NodePath("../../../../../../Turnable/Damage/Cooldown")
-blackboard_value = "stun_time"
-
-[node name="SetSpriteAnimationToIdle" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite" node_paths=PackedStringArray("sprite")]
-script = ExtResource("8_iemc8")
-sprite = NodePath("../../../../../../Turnable/AnimatedSprite2D")
-animation = &"idle"
-
-[node name="SetFallDownToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
+[node name="SetFallDownToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
 script = ExtResource("4_fyquc")
 key = "\"fall_down\""
 value = "false"
 
-[node name="ResetOriginalTImerTime" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/AlwaysSucceedDecorator2/SequenceComposite"]
-script = ExtResource("4_fyquc")
-key = "\"stun_time\""
-value = "get_value(\"original_stun_time\")"
+[node name="WaitCooldownEnd" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown" node_paths=PackedStringArray("node")]
+script = ExtResource("12_7e5mn")
+node = NodePath("../../../../../Turnable/Damage")
+signal_to_wait = &"cooldown_end"
 
-[node name="SetSpriteColorToWhite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage" node_paths=PackedStringArray("sprite")]
-script = ExtResource("6_ldutx")
-sprite = NodePath("../../../../Turnable/AnimatedSprite2D")
-color = Color(1, 1, 1, 1)
-
-[node name="BlackboardSetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+[node name="SetDamageToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
 script = ExtResource("4_fyquc")
 key = "\"damage\""
 value = "false"
@@ -379,7 +324,7 @@ value = "false"
 [node name="Attack" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
 script = ExtResource("3_1wt8o")
 
-[node name="BlackboardCompareCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Attack"]
+[node name="CheckAttackPreperedTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Attack"]
 script = ExtResource("5_gt226")
 left_operand = "get_value(\"attack_prepered\")"
 right_operand = "true"
@@ -390,7 +335,7 @@ script = ExtResource("5_sh4hf")
 [node name="JumpBackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Attack"]
 script = ExtResource("7_kn513")
 
-[node name="BlackboardSetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Attack"]
+[node name="SetAttackPreperedToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Attack"]
 script = ExtResource("4_fyquc")
 key = "\"attack_prepered\""
 value = "false"
@@ -406,16 +351,11 @@ script = ExtResource("5_0ojys")
 area = NodePath("../../../../Turnable/PlayerReach")
 group = &"players"
 
-[node name="SetSpriteAnimationAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/AttackPreparation" node_paths=PackedStringArray("sprite")]
-script = ExtResource("8_iemc8")
-sprite = NodePath("../../../../Turnable/AnimatedSprite2D")
-animation = &"idle"
-
 [node name="WaitTimerAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/AttackPreparation" node_paths=PackedStringArray("timer")]
 script = ExtResource("8_as5hh")
 timer = NodePath("../../../../Turnable/Attack/Delay")
 
-[node name="BlackboardSetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/AttackPreparation"]
+[node name="SetAttackPreperedToTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/AttackPreparation"]
 script = ExtResource("4_fyquc")
 key = "\"attack_prepered\""
 value = "true"
@@ -423,7 +363,7 @@ value = "true"
 [node name="MoveToPlayer" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
 script = ExtResource("8_m3h16")
 
-[node name="BlackboardSetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/MoveToPlayer"]
+[node name="SetAttackPreperedToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/MoveToPlayer"]
 script = ExtResource("4_fyquc")
 key = "\"attack_prepered\""
 value = "false"
@@ -450,7 +390,7 @@ script = ExtResource("3_y8ny6")
 texture_filter = 1
 position = Vector2(1, 0)
 sprite_frames = SubResource("SpriteFrames_j14qf")
-animation = &"jump_back"
+animation = &"walk"
 autoplay = "idle"
 speed_scale = 2.0
 
@@ -471,25 +411,23 @@ shape = SubResource("RectangleShape2D_dtlhh")
 disabled = true
 
 [node name="Delay" type="Timer" parent="Turnable/Attack"]
-wait_time = 0.5
+wait_time = 0.2
 one_shot = true
 
-[node name="Damage" type="Area2D" parent="Turnable" groups=["players"]]
+[node name="Damage" parent="Turnable" groups=["enemies"] instance=ExtResource("27_qkout")]
 collision_layer = 4
 collision_mask = 2
+damage_group = &"players"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Turnable/Damage"]
 position = Vector2(1, -7)
 shape = SubResource("RectangleShape2D_ho6pt")
 
-[node name="Cooldown" type="Timer" parent="Turnable/Damage"]
-wait_time = 0.2
-one_shot = true
-
-[node name="FallDown" type="Timer" parent="Turnable/Damage"]
-one_shot = true
-
 [connection signal="animation_finished" from="Turnable/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="area_entered" from="Turnable/PlayerReach" to="." method="_on_player_reach_area_entered"]
 [connection signal="body_entered" from="Turnable/Attack" to="." method="_on_attack_body_entered"]
-[connection signal="area_entered" from="Turnable/Damage" to="." method="_on_damage_area_entered"]
-[connection signal="timeout" from="Turnable/Damage/FallDown" to="." method="_on_fall_down_timeout"]
+[connection signal="cooldown_end" from="Turnable/Damage" to="." method="_on_damage_cooldown_end"]
+[connection signal="damage_taken" from="Turnable/Damage" to="." method="_on_damage_damage_taken"]
+[connection signal="fall_down" from="Turnable/Damage" to="." method="_on_damage_fall_down"]
+[connection signal="get_up" from="Turnable/Damage" to="." method="_on_damage_get_up"]
+[connection signal="start_get_up" from="Turnable/Damage" to="." method="_on_damage_start_get_up"]

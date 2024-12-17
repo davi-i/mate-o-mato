@@ -1,25 +1,42 @@
-[gd_scene load_steps=44 format=3 uid="uid://c18ejp3xww7bx"]
+[gd_scene load_steps=55 format=3 uid="uid://c18ejp3xww7bx"]
 
 [ext_resource type="Script" path="res://characters/enemies/jaqueira/jaqueira.gd" id="1_67487"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="2_u1hfq"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="3_mdkti"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="4_gbgu8"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_compare.gd" id="5_3d4mh"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="5_50cph"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector.gd" id="6_lpqde"]
 [ext_resource type="Script" path="res://characters/actions/set_enemy_target.gd" id="6_pji80"]
+[ext_resource type="Script" path="res://characters/actions/jump_back.gd" id="7_1xwg6"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/decorators/cooldown.gd" id="7_crlo6"]
 [ext_resource type="Script" path="res://characters/conditions/area2d_colliding.gd" id="7_dg0j1"]
 [ext_resource type="Script" path="res://characters/actions/attack.gd" id="8_2r52h"]
+[ext_resource type="Script" path="res://characters/actions/wait_signal.gd" id="8_sa6p7"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_set.gd" id="9_0n0j0"]
 [ext_resource type="Script" path="res://characters/actions/move_to_target.gd" id="10_2sr1b"]
 [ext_resource type="Script" path="res://addons/beehave/blackboard.gd" id="11_0akia"]
+[ext_resource type="Texture2D" uid="uid://bvqrt8kff4p07" path="res://characters/enemies/jaqueira/sprites/jaqueira_fallen-Sheet.png" id="11_y3ay8"]
 [ext_resource type="Texture2D" uid="uid://ca6y2cfuvp44r" path="res://characters/enemies/jaqueira/sprites/jaqueira_throwing-Sheet.png" id="12_2iaxn"]
+[ext_resource type="Texture2D" uid="uid://7ku42islkopj" path="res://characters/enemies/jaqueira/sprites/jaqueira_gettup-Sheet.png" id="12_e2xsq"]
 [ext_resource type="Texture2D" uid="uid://d0gv7818xobed" path="res://characters/enemies/jaqueira/sprites/jaqueira_idle-Sheet.png" id="12_n34hd"]
 [ext_resource type="Texture2D" uid="uid://crptp077qpeia" path="res://characters/enemies/jaqueira/sprites/jaqueira_dano-Sheet.png" id="13_qft4s"]
 [ext_resource type="Texture2D" uid="uid://dvb8nox1lx0h6" path="res://characters/enemies/jaqueira/sprites/jaqueira_walk-Sheet.png" id="14_xxd5q"]
+[ext_resource type="PackedScene" uid="uid://c6gb10qkoj7bx" path="res://characters/components/damage.tscn" id="15_h52di"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45cbs"]
 size = Vector2(20, 9)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldkrt"]
 size = Vector2(50, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5q03q"]
+atlas = ExtResource("11_y3ay8")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eruxy"]
+atlas = ExtResource("12_e2xsq")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ou4d5"]
 atlas = ExtResource("12_n34hd")
@@ -123,6 +140,22 @@ region = Rect2(576, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_q4m0v"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5q03q")
+}],
+"loop": true,
+"name": &"fall_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eruxy")
+}],
+"loop": true,
+"name": &"get_up",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ou4d5")
@@ -240,6 +273,50 @@ actor = NodePath("..")
 [node name="SelectorReactiveComposite" type="Node" parent="BeehaveTree"]
 script = ExtResource("3_mdkti")
 
+[node name="Damage" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+script = ExtResource("4_gbgu8")
+
+[node name="CheckDamageTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("5_3d4mh")
+left_operand = "get_value(\"damage\")"
+right_operand = "true"
+
+[node name="WaitCooldown" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("6_lpqde")
+
+[node name="FallDownAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown"]
+script = ExtResource("4_gbgu8")
+
+[node name="CheckFallDownTrue" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
+script = ExtResource("5_3d4mh")
+left_operand = "get_value(\"fall_down\")"
+right_operand = "true"
+
+[node name="JumpBackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
+script = ExtResource("7_1xwg6")
+impulse = Vector2(300, -200)
+animation_name = "knockback"
+
+[node name="WaitGetUp" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction" node_paths=PackedStringArray("node")]
+script = ExtResource("8_sa6p7")
+node = NodePath("../../../../../../Turnable/Damage")
+signal_to_wait = &"get_up"
+
+[node name="SetFallDownToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown/FallDownAction"]
+script = ExtResource("9_0n0j0")
+key = "\"fall_down\""
+value = "false"
+
+[node name="WaitCooldownEnd" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage/WaitCooldown" node_paths=PackedStringArray("node")]
+script = ExtResource("8_sa6p7")
+node = NodePath("../../../../../Turnable/Damage")
+signal_to_wait = &"cooldown_end"
+
+[node name="SetDamageToFalse" type="Node" parent="BeehaveTree/SelectorReactiveComposite/Damage"]
+script = ExtResource("9_0n0j0")
+key = "\"damage\""
+value = "false"
+
 [node name="SequenceReactiveComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
 script = ExtResource("5_50cph")
 
@@ -282,19 +359,26 @@ modulate = Color(0.466667, 0.6, 0.133333, 1)
 texture_filter = 1
 position = Vector2(1, 0)
 sprite_frames = SubResource("SpriteFrames_q4m0v")
-animation = &"knockback"
+animation = &"idle"
 autoplay = "idle"
 speed_scale = 2.0
 
-[node name="Damage" type="Area2D" parent="Turnable" groups=["enemies"]]
+[node name="JacaMarker" type="Marker2D" parent="Turnable"]
+position = Vector2(19, -15)
+
+[node name="Damage" parent="Turnable" groups=["enemies"] instance=ExtResource("15_h52di")]
+scale = Vector2(1.58901, 1.64752)
 collision_layer = 4
 collision_mask = 2
+damage_group = &"players"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Turnable/Damage"]
 position = Vector2(-1.5, -4)
 shape = SubResource("RectangleShape2D_ho6pt")
 
-[node name="JacaMarker" type="Marker2D" parent="Turnable"]
-position = Vector2(19, -15)
-
 [connection signal="animation_finished" from="Turnable/AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="cooldown_end" from="Turnable/Damage" to="." method="_on_damage_cooldown_end"]
+[connection signal="damage_taken" from="Turnable/Damage" to="." method="_on_damage_damage_taken"]
+[connection signal="fall_down" from="Turnable/Damage" to="." method="_on_damage_fall_down"]
+[connection signal="get_up" from="Turnable/Damage" to="." method="_on_damage_get_up"]
+[connection signal="start_get_up" from="Turnable/Damage" to="." method="_on_damage_start_get_up"]

@@ -1,6 +1,7 @@
 extends Enemy
 
 @onready var sprite = $Turnable/AnimatedSprite2D
+@onready var damage = $Turnable/Damage
 
 func _ready() -> void:
 	$Blackboard.set_value("player", player)
@@ -11,7 +12,7 @@ func turn(direction) -> void:
 	$Turnable.scale = Vector2(direction, 1)
 
 func _process(delta: float) -> void:
-	if not is_attacking() :
+	if not damage.on_cooldown() and not is_attacking() :
 		if velocity != Vector2.ZERO:
 			sprite.play("walk")
 		else:
@@ -23,27 +24,19 @@ const JACA_RANGE = 100.0
 const JACA_VELOCITY = 500
 	
 func attack() -> void:
-	if not is_attacking():
+	if not damage.on_cooldown() and not is_attacking():
 		sprite.play("throw")
 		await sprite.animation_finished
 		var distance = player.global_position - $Turnable/JacaMarker.global_position
-		print("player position: ", player.global_position)
-		print("inital position: ",  $Turnable/JacaMarker.global_position)
-		print("distance: ", distance)
 		var movement = distance.x + randf_range(-JACA_RANGE, JACA_RANGE)
-		print("movement: ", movement)
 		
 		var jaca = jaca_scene.instantiate()
 		var gravity = get_gravity()
 		
-		print("gravity", gravity)
-		
-		print(movement * gravity.y / JACA_VELOCITY ** 2)
-		var theta = asin(-abs(movement) * gravity.y / JACA_VELOCITY ** 2) / 2
-		print("theta: ", rad_to_deg(theta))
+		var angle = asin(-abs(movement) * gravity.y / JACA_VELOCITY ** 2) / 2
 		jaca.velocity = JACA_VELOCITY * Vector2(
-			cos(theta) * sign(movement),
-			sin(theta)
+			cos(angle) * sign(movement),
+			sin(angle)
 		)
 		jaca.y = $CollisionShape2D.global_position.y
 		jaca.get_node("Turnable").scale = $Turnable.scale
@@ -65,3 +58,21 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		sprite.play("reload")
 	elif sprite.animation == "reload":
 		cancel_attack()
+		
+func _on_damage_damage_taken(damage: float, area: Area2D) -> void:
+	cancel_attack()
+	$Blackboard.set_value("damage", true)
+	sprite.modulate = Global.ENEMY_DAMAGE_COLOR
+
+func _on_damage_fall_down() -> void:
+	$Blackboard.set_value("fall_down", true)
+	sprite.play("fall_down")
+
+func _on_damage_cooldown_end() -> void:
+	sprite.modulate = Color.WHITE
+
+func _on_damage_start_get_up() -> void:
+	sprite.play("get_up")
+
+func _on_damage_get_up() -> void:
+	sprite.play("idle")

@@ -1,7 +1,7 @@
 extends ActionLeaf
 class_name SetEnemyTargetAction
 
-const DEFAULT_DISTANCE_TO_PLAYER = 120
+const DEFAULT_DISTANCE_TO_PLAYER = 24
 
 func tick(actor: Node, blackboard: Blackboard) -> int:
 	var enemy: Enemy = actor
