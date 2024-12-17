@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://characters/player/player.gd" id="1_6vuoc"]
 [ext_resource type="Script" path="res://characters/player/attack.gd" id="2_i00mi"]
-[ext_resource type="Texture2D" uid="uid://bwqsnufsbu5e4" path="res://characters/player/sprites/voinha_idle-Sheet.png" id="2_tnal2"]
+[ext_resource type="Texture2D" uid="uid://ck1yeexef64o2" path="res://characters/player/sprites/voinha_idle-Sheet.png" id="2_tnal2"]
 [ext_resource type="Texture2D" uid="uid://ctxclpxnyh6s7" path="res://characters/player/sprites/voinha_fallen-Sheet.png" id="3_ed80o"]
 [ext_resource type="Texture2D" uid="uid://bvnecorwd4pcb" path="res://characters/player/sprites/voinha_punch_combo-Sheet.png" id="3_nmpju"]
 [ext_resource type="Texture2D" uid="uid://g353ul8itoci" path="res://characters/player/sprites/voinha_gettup-Sheet.png" id="4_md0n8"]
@@ -27,27 +27,27 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("4_md0n8")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_im0bh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_v5at8"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_b2v26"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0r3p5"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sc7w3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cut6w"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fu65i"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkobd"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_48xm3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_sq26x"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(256, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jnuj7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_osioa"]
 atlas = ExtResource("2_tnal2")
 region = Rect2(320, 0, 64, 64)
 
@@ -163,22 +163,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_im0bh")
+"texture": SubResource("AtlasTexture_v5at8")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_b2v26")
+"texture": SubResource("AtlasTexture_0r3p5")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_sc7w3")
+"texture": SubResource("AtlasTexture_cut6w")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fu65i")
+"texture": SubResource("AtlasTexture_hkobd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_48xm3")
+"texture": SubResource("AtlasTexture_sq26x")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jnuj7")
+"texture": SubResource("AtlasTexture_osioa")
 }],
 "loop": true,
 "name": &"idle",
@@ -319,8 +319,9 @@ one_shot = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turnable"]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_aak6i")
-animation = &"get_up"
+animation = &"idle"
 autoplay = "idle"
+frame_progress = 0.191855
 speed_scale = 2.0
 
 [node name="Damage" parent="Turnable" groups=["players"] instance=ExtResource("7_6rwgy")]

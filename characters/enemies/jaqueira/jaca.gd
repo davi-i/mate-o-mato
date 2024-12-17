@@ -21,11 +21,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if area.is_in_group("players"):
-		hit = true
-		var old_pos = global_position
-		get_parent().call_deferred("remove_child", self)
-		area.find_parent("Player").call_deferred("add_child", self)
-		set_deferred("global_position", old_pos)
+		queue_free()
 
 
 func _on_kill_timer_timeout() -> void:

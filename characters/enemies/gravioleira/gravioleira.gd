@@ -23,8 +23,9 @@ func attack() -> void:
 		sprite.play("left_punch")
 		
 func is_acting():
-	var delay = attack_node.get_node("Delay")
-	return not (delay.is_stopped() or delay.paused) or sprite.animation not in ["idle", "walk"]
+	return sprite.animation not in ["idle", "walk"]
+	#var delay = attack_node.get_node("Delay")
+	#return not (delay.is_stopped() or delay.paused) or sprite.animation not in ["idle", "walk"]
 
 func is_attacking():
 	var delay = attack_node.get_node("Delay")

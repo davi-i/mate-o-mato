@@ -20,5 +20,5 @@ func tick(actor: Node, blackboard: Blackboard) -> int:
 func after_run(actor: Node, blackboard: Blackboard) -> void:
 	actor.velocity = Vector2.ZERO
 
-#func interrupt(actor: Node, blackboard: Blackboard) -> void:
-	#actor.velocity = Vector2.ZERO
+func interrupt(actor: Node, blackboard: Blackboard) -> void:
+	actor.velocity = Vector2.ZERO

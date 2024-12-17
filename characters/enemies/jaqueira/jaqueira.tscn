@@ -1,15 +1,13 @@
-[gd_scene load_steps=55 format=3 uid="uid://c18ejp3xww7bx"]
+[gd_scene load_steps=59 format=3 uid="uid://c18ejp3xww7bx"]
 
 [ext_resource type="Script" path="res://characters/enemies/jaqueira/jaqueira.gd" id="1_67487"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/beehave_tree.gd" id="2_u1hfq"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector_reactive.gd" id="3_mdkti"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="4_gbgu8"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_compare.gd" id="5_3d4mh"]
-[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="5_50cph"]
 [ext_resource type="Script" path="res://addons/beehave/nodes/composites/selector.gd" id="6_lpqde"]
 [ext_resource type="Script" path="res://characters/actions/set_enemy_target.gd" id="6_pji80"]
 [ext_resource type="Script" path="res://characters/actions/jump_back.gd" id="7_1xwg6"]
-[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/cooldown.gd" id="7_crlo6"]
 [ext_resource type="Script" path="res://characters/conditions/area2d_colliding.gd" id="7_dg0j1"]
 [ext_resource type="Script" path="res://characters/actions/attack.gd" id="8_2r52h"]
 [ext_resource type="Script" path="res://characters/actions/wait_signal.gd" id="8_sa6p7"]
@@ -19,10 +17,16 @@
 [ext_resource type="Texture2D" uid="uid://bvqrt8kff4p07" path="res://characters/enemies/jaqueira/sprites/jaqueira_fallen-Sheet.png" id="11_y3ay8"]
 [ext_resource type="Texture2D" uid="uid://ca6y2cfuvp44r" path="res://characters/enemies/jaqueira/sprites/jaqueira_throwing-Sheet.png" id="12_2iaxn"]
 [ext_resource type="Texture2D" uid="uid://7ku42islkopj" path="res://characters/enemies/jaqueira/sprites/jaqueira_gettup-Sheet.png" id="12_e2xsq"]
+[ext_resource type="Script" path="res://characters/conditions/random.gd" id="12_k4i34"]
 [ext_resource type="Texture2D" uid="uid://d0gv7818xobed" path="res://characters/enemies/jaqueira/sprites/jaqueira_idle-Sheet.png" id="12_n34hd"]
+[ext_resource type="Script" path="res://characters/actions/wait_secs.gd" id="13_e6tla"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/cooldown.gd" id="13_og5t1"]
 [ext_resource type="Texture2D" uid="uid://crptp077qpeia" path="res://characters/enemies/jaqueira/sprites/jaqueira_dano-Sheet.png" id="13_qft4s"]
+[ext_resource type="Script" path="res://characters/actions/success.gd" id="14_ef681"]
 [ext_resource type="Texture2D" uid="uid://dvb8nox1lx0h6" path="res://characters/enemies/jaqueira/sprites/jaqueira_walk-Sheet.png" id="14_xxd5q"]
 [ext_resource type="PackedScene" uid="uid://c6gb10qkoj7bx" path="res://characters/components/damage.tscn" id="15_h52di"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/time_limiter.gd" id="15_nmqvk"]
+[ext_resource type="Script" path="res://characters/actions/running.gd" id="17_dtng6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_45cbs"]
 size = Vector2(20, 9)
@@ -317,26 +321,56 @@ script = ExtResource("9_0n0j0")
 key = "\"damage\""
 value = "false"
 
-[node name="SequenceReactiveComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
-script = ExtResource("5_50cph")
+[node name="ReachPlayer" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+script = ExtResource("4_gbgu8")
 
-[node name="SetEnemyTargetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceReactiveComposite"]
+[node name="SetEnemyTargetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer"]
 script = ExtResource("6_pji80")
 
-[node name="ReachPlayerCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceReactiveComposite" node_paths=PackedStringArray("area")]
+[node name="ReachPlayerCondition" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer" node_paths=PackedStringArray("area")]
 script = ExtResource("7_dg0j1")
 area = NodePath("../../../../Turnable/PlayerReach")
 group = &"players"
 
-[node name="CooldownDecorator" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceReactiveComposite"]
-script = ExtResource("7_crlo6")
-wait_time = 20.0
+[node name="Attack" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer"]
+script = ExtResource("4_gbgu8")
 
-[node name="AttackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/SequenceReactiveComposite/CooldownDecorator"]
+[node name="WaitSecsAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer/Attack"]
+script = ExtResource("13_e6tla")
+time = ".2"
+
+[node name="CooldownDecorator" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer/Attack"]
+script = ExtResource("13_og5t1")
+wait_time = 0.1
+
+[node name="SequenceComposite" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer/Attack/CooldownDecorator"]
+script = ExtResource("4_gbgu8")
+
+[node name="SuccessAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer/Attack/CooldownDecorator/SequenceComposite"]
+script = ExtResource("14_ef681")
+
+[node name="AttackAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/ReachPlayer/Attack/CooldownDecorator/SequenceComposite"]
 script = ExtResource("8_2r52h")
 
-[node name="MoveToTargetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+[node name="TimeLimiterDecorator" type="Node" parent="BeehaveTree/SelectorReactiveComposite"]
+script = ExtResource("15_nmqvk")
+wait_time = 1.0
+
+[node name="Act" type="Node" parent="BeehaveTree/SelectorReactiveComposite/TimeLimiterDecorator"]
+script = ExtResource("6_lpqde")
+
+[node name="MoveToPlayer" type="Node" parent="BeehaveTree/SelectorReactiveComposite/TimeLimiterDecorator/Act"]
+script = ExtResource("4_gbgu8")
+
+[node name="RandomConditon" type="Node" parent="BeehaveTree/SelectorReactiveComposite/TimeLimiterDecorator/Act/MoveToPlayer"]
+script = ExtResource("12_k4i34")
+success_chance = 0.7
+
+[node name="MoveToTargetAction" type="Node" parent="BeehaveTree/SelectorReactiveComposite/TimeLimiterDecorator/Act/MoveToPlayer"]
 script = ExtResource("10_2sr1b")
+
+[node name="RunningACtion" type="Node" parent="BeehaveTree/SelectorReactiveComposite/TimeLimiterDecorator/Act"]
+script = ExtResource("17_dtng6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 22.5)
@@ -355,7 +389,6 @@ collision_layer = 8
 shape = SubResource("RectangleShape2D_ldkrt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Turnable"]
-modulate = Color(0.466667, 0.6, 0.133333, 1)
 texture_filter = 1
 position = Vector2(1, 0)
 sprite_frames = SubResource("SpriteFrames_q4m0v")

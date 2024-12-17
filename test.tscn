@@ -1,9 +1,21 @@
-[gd_scene load_steps=42 format=3 uid="uid://cmb831y8y6qnl"]
+[gd_scene load_steps=55 format=3 uid="uid://cmb831y8y6qnl"]
 
-[ext_resource type="Texture2D" uid="uid://bwqsnufsbu5e4" path="res://characters/player/sprites/voinha_idle-Sheet.png" id="1_auhwo"]
 [ext_resource type="Script" path="res://test.gd" id="1_kwfxt"]
 [ext_resource type="Texture2D" uid="uid://bvnecorwd4pcb" path="res://characters/player/sprites/voinha_punch_combo-Sheet.png" id="2_y5eh5"]
 [ext_resource type="Texture2D" uid="uid://4jqpjeihcnrs" path="res://characters/player/sprites/voinha_walk-Sheet.png" id="3_8phsu"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence.gd" id="5_iknso"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_compare.gd" id="6_01u0k"]
+[ext_resource type="Script" path="res://characters/actions/attack.gd" id="7_2gm34"]
+[ext_resource type="Script" path="res://characters/actions/jump_back.gd" id="8_8760o"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/leaves/blackboard_set.gd" id="9_gdlhg"]
+[ext_resource type="Script" path="res://characters/actions/set_enemy_target.gd" id="10_c3h6m"]
+[ext_resource type="Script" path="res://characters/conditions/area2d_colliding.gd" id="11_whkaq"]
+[ext_resource type="Script" path="res://characters/actions/wait_timer.gd" id="12_yuewl"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/composites/sequence_reactive.gd" id="13_3ing0"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/inverter.gd" id="14_p3qx0"]
+[ext_resource type="Script" path="res://characters/conditions/acting.gd" id="15_eotcn"]
+[ext_resource type="Script" path="res://characters/actions/move_to_target.gd" id="16_eb5y6"]
+[ext_resource type="Script" path="res://addons/beehave/nodes/decorators/cooldown.gd" id="17_84etl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gvuqk"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -17,28 +29,30 @@ background_mode = 2
 sky = SubResource("Sky_yqqws")
 tonemap_mode = 2
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qs4c5"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_im0bh"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b2v26"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sc7w3"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fu65i"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_48xm3"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(256, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jnuj7"]
-atlas = ExtResource("1_auhwo")
+atlas = SubResource("CompressedTexture2D_qs4c5")
 region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nbk7j"]
@@ -302,3 +316,77 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.144242, 3.26236, 237.471)
 shape = SubResource("ConcavePolygonShape3D_v10af")
+
+[node name="Attack" type="Node" parent="."]
+script = ExtResource("5_iknso")
+
+[node name="CheckAttackPreperedTrue" type="Node" parent="Attack"]
+script = ExtResource("6_01u0k")
+left_operand = "get_value(\"attack_prepered\")"
+right_operand = "true"
+
+[node name="AttackAction" type="Node" parent="Attack"]
+script = ExtResource("7_2gm34")
+
+[node name="JumpBackAction" type="Node" parent="Attack"]
+script = ExtResource("8_8760o")
+
+[node name="SetAttackPreperedToFalse" type="Node" parent="Attack"]
+script = ExtResource("9_gdlhg")
+key = "\"attack_prepered\""
+value = "false"
+
+[node name="AttackPreparation" type="Node" parent="."]
+script = ExtResource("5_iknso")
+
+[node name="SetEnemyTargetAction" type="Node" parent="AttackPreparation"]
+script = ExtResource("10_c3h6m")
+
+[node name="ReachPlayerCondition" type="Node" parent="AttackPreparation"]
+script = ExtResource("11_whkaq")
+group = &"players"
+
+[node name="WaitTimerAction" type="Node" parent="AttackPreparation"]
+script = ExtResource("12_yuewl")
+
+[node name="SetAttackPreperedToTrue" type="Node" parent="AttackPreparation"]
+script = ExtResource("9_gdlhg")
+key = "\"attack_prepered\""
+value = "true"
+
+[node name="MoveToPlayer" type="Node" parent="."]
+script = ExtResource("13_3ing0")
+
+[node name="SetAttackPreperedToFalse" type="Node" parent="MoveToPlayer"]
+script = ExtResource("9_gdlhg")
+key = "\"attack_prepered\""
+value = "false"
+
+[node name="InverterDecorator" type="Node" parent="MoveToPlayer"]
+script = ExtResource("14_p3qx0")
+
+[node name="ActingCondition" type="Node" parent="MoveToPlayer/InverterDecorator"]
+script = ExtResource("15_eotcn")
+
+[node name="MoveToTargetAction" type="Node" parent="MoveToPlayer"]
+script = ExtResource("16_eb5y6")
+
+[node name="SequenceReactiveComposite" type="Node" parent="."]
+script = ExtResource("13_3ing0")
+
+[node name="SetEnemyTargetAction" type="Node" parent="SequenceReactiveComposite"]
+script = ExtResource("10_c3h6m")
+
+[node name="ReachPlayerCondition" type="Node" parent="SequenceReactiveComposite"]
+script = ExtResource("11_whkaq")
+group = &"players"
+
+[node name="CooldownDecorator" type="Node" parent="SequenceReactiveComposite"]
+script = ExtResource("17_84etl")
+wait_time = 20.0
+
+[node name="AttackAction" type="Node" parent="SequenceReactiveComposite/CooldownDecorator"]
+script = ExtResource("7_2gm34")
+
+[node name="MoveToTargetAction" type="Node" parent="."]
+script = ExtResource("16_eb5y6")

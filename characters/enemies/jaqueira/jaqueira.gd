@@ -25,6 +25,7 @@ const JACA_VELOCITY = 500
 	
 func attack() -> void:
 	if not damage.on_cooldown() and not is_attacking():
+		print("jaq attack")
 		sprite.play("throw")
 		await sprite.animation_finished
 		var distance = player.global_position - $Turnable/JacaMarker.global_position
@@ -51,6 +52,7 @@ func direction():
 	return $Turnable.scale.x
 
 func cancel_attack():
+	print("jaq cancel attack")
 	sprite.play("idle")
 
 func _on_animated_sprite_2d_animation_finished() -> void:
