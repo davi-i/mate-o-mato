@@ -29,6 +29,7 @@ position = Vector2(-117, 22)
 
 [node name="Gravioleira" parent="Objects" node_paths=PackedStringArray("player") instance=ExtResource("2_esgfb")]
 process_mode = 4
+collision_mask = 5
 player = NodePath("../Player")
 
 [node name="Jaqueira" parent="Objects" node_paths=PackedStringArray("player") instance=ExtResource("3_535uy")]
