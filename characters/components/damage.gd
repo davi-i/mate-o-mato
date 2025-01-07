@@ -22,12 +22,18 @@ var total_damage = 0
 		$FallDownCancel.wait_time = new_time
 @export var damage_to_fall_down = Global.DAMAGE_TO_FALL_DOWN
 @export var damage_group: StringName
+@export var health: int : 
+	set(new_health):
+		health = new_health
+		if health <= 0:
+			killed.emit()
 
 signal damage_taken(damage: float, area: Area2D)
 signal fall_down
 signal start_get_up
 signal get_up
 signal cooldown_end
+signal killed
 
 func on_cooldown() -> bool:
 	return not $Cooldown.is_stopped() or not $FallDown.is_stopped() or not $GetUp.is_stopped()
@@ -43,6 +49,7 @@ func _on_area_entered(area: Area2D) -> void:
 		$FallDownCancel.start()
 		var damage = area.attack_damage()
 		total_damage += damage
+		health -= damage
 		damage_taken.emit(damage, area)
 		if total_damage >= damage_to_fall_down:
 			$FallDown.start()

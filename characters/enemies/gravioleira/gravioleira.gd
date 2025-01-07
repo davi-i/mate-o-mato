@@ -4,8 +4,6 @@ extends Enemy
 @onready var attack_node = $Turnable/Attack
 @onready var damage = $Turnable/Damage
 
-var health = 7
-
 func _ready() -> void:
 	$Blackboard.set_value("player", player)
 	$Blackboard.set_value("speed", 80)
@@ -14,9 +12,6 @@ func turn(direction) -> void:
 	$Turnable.scale = Vector2(direction, 1)
 
 func _process(delta: float) -> void:
-	if(health <= 0):
-		queue_free()
-	
 	if not is_acting():
 		if velocity != Vector2.ZERO:
 			sprite.play("walk")
@@ -53,7 +48,6 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 
 func _on_damage_damage_taken(damage: float, area: Area2D) -> void:
 	cancel_attack()
-	health -= 1
 	$Blackboard.set_value("damage", true)
 	sprite.modulate = Global.ENEMY_DAMAGE_COLOR
 
@@ -72,3 +66,7 @@ func _on_damage_get_up() -> void:
 
 func _on_player_reach_area_entered(area: Area2D) -> void:
 	sprite.play("idle")
+
+
+func _on_damage_killed() -> void:
+	queue_free()

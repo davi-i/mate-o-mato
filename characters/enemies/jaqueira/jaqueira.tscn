@@ -404,6 +404,7 @@ scale = Vector2(1.58901, 1.64752)
 collision_layer = 4
 collision_mask = 2
 damage_group = &"players"
+health = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Turnable/Damage"]
 position = Vector2(-1.5, -4)
@@ -414,4 +415,5 @@ shape = SubResource("RectangleShape2D_ho6pt")
 [connection signal="damage_taken" from="Turnable/Damage" to="." method="_on_damage_damage_taken"]
 [connection signal="fall_down" from="Turnable/Damage" to="." method="_on_damage_fall_down"]
 [connection signal="get_up" from="Turnable/Damage" to="." method="_on_damage_get_up"]
+[connection signal="killed" from="Turnable/Damage" to="." method="_on_damage_killed"]
 [connection signal="start_get_up" from="Turnable/Damage" to="." method="_on_damage_start_get_up"]

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dp8yrtku0siy3"]
+
+[ext_resource type="Script" path="res://global.gd" id="1_duxwe"]
+[ext_resource type="AudioStream" uid="uid://bm8bh26t607aq" path="res://musica/BeepBox-Song.wav" id="2_fj5sy"]
+
+[node name="Global" type="Node"]
+script = ExtResource("1_duxwe")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_fj5sy")
+autoplay = true
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]

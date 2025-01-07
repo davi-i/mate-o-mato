@@ -9,6 +9,10 @@ const JUMP_VELOCITY = -80.0
 @onready var attack = $Turnable/Attack
 @onready var damage = $Turnable/Damage
 
+func _ready() -> void:
+	$CanvasLayer/MarginContainer/ProgressBar.max_value = damage.health
+	$CanvasLayer/MarginContainer/ProgressBar.value = damage.health
+
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	#if not is_on_floor():
@@ -56,7 +60,7 @@ func can_attack() -> bool:
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("attack") and can_attack() and await attack.attack():
-		velocity.x = 0
+		velocity = Vector2.ZERO
 
 func direction():
 	return $Turnable.scale.x
@@ -66,13 +70,14 @@ var base_attack = 1
 func attack_damage():
 	return attack.attack_damage()
 
-func _on_damage_damage_taken(damage: float, area) -> void:
+func _on_damage_damage_taken(damage_value: float, area) -> void:
 	print("damage player")
 	attack.cancel_attack()
 	var direction = sign(area.find_parent("Turnable").scale.x)
 	velocity.y = 0
 	velocity.x = direction * 50
 	sprite.play("knockback")
+	$CanvasLayer/MarginContainer/ProgressBar.value = damage.health
 
 func _on_damage_cooldown_end() -> void:
 	print("damage cooldown end")
@@ -91,3 +96,6 @@ func _on_damage_start_get_up() -> void:
 func _on_damage_get_up() -> void:
 	print("get up")
 	sprite.play("idle")
+
+func _on_damage_killed() -> void:
+	get_tree().change_scene_to_file("res://menus/perdeu.tscn")

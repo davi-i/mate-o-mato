@@ -3,8 +3,6 @@ extends Enemy
 @onready var sprite = $Turnable/AnimatedSprite2D
 @onready var damage = $Turnable/Damage
 
-var health = 4
-
 func _ready() -> void:
 	$Blackboard.set_value("player", player)
 	$Blackboard.set_value("speed", 40)
@@ -14,9 +12,6 @@ func turn(direction) -> void:
 	$Turnable.scale = Vector2(direction, 1)
 
 func _process(delta: float) -> void:
-	if(health <= 0):
-		queue_free()
-	
 	if not damage.on_cooldown() and not is_attacking() :
 		if velocity != Vector2.ZERO:
 			sprite.play("walk")
@@ -25,7 +20,7 @@ func _process(delta: float) -> void:
 
 var jaca_scene = preload("res://characters/enemies/jaqueira/jaca.tscn")
 	
-const JACA_RANGE = 100.0
+const JACA_RANGE = 200.0
 const JACA_VELOCITY = 500
 	
 func attack() -> void:
@@ -34,7 +29,7 @@ func attack() -> void:
 		sprite.play("throw")
 		await sprite.animation_finished
 		var distance = player.global_position - $Turnable/JacaMarker.global_position
-		var movement = distance.x + randf_range(-JACA_RANGE, JACA_RANGE)
+		var movement = distance.x + randf_range(- 2 * JACA_RANGE / 3, JACA_RANGE / 3)
 		
 		var jaca = jaca_scene.instantiate()
 		var gravity = get_gravity()
@@ -68,7 +63,6 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		
 func _on_damage_damage_taken(damage: float, area: Area2D) -> void:
 	cancel_attack()
-	health -= 1
 	$Blackboard.set_value("damage", true)
 	sprite.modulate = Global.ENEMY_DAMAGE_COLOR
 
@@ -84,3 +78,7 @@ func _on_damage_start_get_up() -> void:
 
 func _on_damage_get_up() -> void:
 	sprite.play("idle")
+
+
+func _on_damage_killed() -> void:
+	queue_free()
